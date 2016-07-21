@@ -29,6 +29,13 @@ public class Responder {
         return new ResponseEntity<>(msg, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String login(@RequestBody String msg) throws UnsupportedEncodingException {
+
+        LOGGER.info("Sending post to login.jsp" + msg);
+        return "login";
+    }
+
     @RequestMapping(value = "/fbnotify", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> ping(@RequestParam(value = "hub.challenge", defaultValue = "fbnotify web service test ping")
                                                    String challenge) throws UnsupportedEncodingException {
