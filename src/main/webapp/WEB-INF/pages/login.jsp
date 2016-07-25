@@ -1,8 +1,17 @@
-<!DOCTYPE html>
+<%--
+  Created by IntelliJ IDEA.
+  User: padmaka
+  Date: 7/25/16
+  Time: 2:44 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Facebook Login JavaScript Example</title>
     <meta charset="UTF-8">
+
 </head>
 <body>
 <script>
@@ -82,6 +91,8 @@
             console.log('Successful login for: ' + response.name);
             document.getElementById('status').innerHTML =
                     'Thanks for logging in, ' + response.name + '!';
+            console.log("${res}");
+            window.location = "http://${uamip}:${uamport}/logon?username=testuser&password=d14b2343e44f19a5d37fc83f68bc1daae123";
         });
     }
 </script>
