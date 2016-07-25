@@ -22,18 +22,21 @@ import java.io.UnsupportedEncodingException;
 public class Responder {
     private static final Logger LOGGER = Logger.getLogger(Responder.class);
 
+
+    @RequestMapping(value = "/oauth", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String login(@RequestParam("res") String res, @RequestParam("uamip") String uamip, @RequestParam("uamport") String uamport,
+                        @RequestParam("mac") String mac, @RequestParam("called") String called, @RequestParam("ssid") String ssid,
+                        @RequestParam("userurl") String userurl, @RequestParam("challenge") String challenge) throws UnsupportedEncodingException {
+
+        LOGGER.info("Sending post to login.jsp. res - " + res);
+        return "login";
+    }
+
     @RequestMapping(value = "/fbnotify", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getNLog(@RequestBody String msg) throws UnsupportedEncodingException {
 
         LOGGER.info(msg);
         return new ResponseEntity<>(msg, HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String login(@RequestBody String msg) throws UnsupportedEncodingException {
-
-        LOGGER.info("Sending post to login.jsp" + msg);
-        return "login";
     }
 
     @RequestMapping(value = "/fbnotify", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
