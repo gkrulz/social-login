@@ -1,5 +1,6 @@
 package com.gk.springtest.controller;
 
+import com.gk.springtest.util.RAGenerator;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by Padmaka on 7/18/16.
@@ -57,10 +59,19 @@ public class Responder {
                                           @RequestParam(value = "session", required = false) String session)
             throws UnsupportedEncodingException {
 
+        String code = "REJECT";
+        String secret = "cake1234";
+        String newRa = null;
+
+        try {
+            newRa = RAGenerator.generateRA(code + ra + secret);
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.error("", e);
+        }
         LOGGER.info("Sending post to login.jsp. type - " + type + " mac - " + mac);
 
-        String msg = "\"CODE\" \"REJECT\"\n" +
-                "\"RA\" \"" + ra + "\"\n" +
+        String msg = "\"CODE\" \"" + code + "\"\n" +
+                "\"RA\" \"" + newRa + "\"\n" +
                 "\"BLOCKED_MSG\" \"Invalid%20username%20or%20password\"";
 
         return new ResponseEntity<String>(msg, HttpStatus.CREATED);
