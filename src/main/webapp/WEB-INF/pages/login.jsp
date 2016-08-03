@@ -9,8 +9,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Facebook Login JavaScript Example</title>
+    <title>Facebook WiFi Login</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.min.css"/>">
+
+    <!-- jQuery library -->
+    <script src="<c:url value="/resources/js/jquery-3.1.0.min.js"/>"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
 
 </head>
 <body>
@@ -34,7 +43,7 @@
             // The person is not logged into Facebook, so we're not sure if
             // they are logged into this app or not.
             document.getElementById('status').innerHTML = 'Please log ' +
-                    'into Facebook.';
+                    'in to Facebook.';
         }
     }
 
@@ -83,16 +92,32 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
+    function postInfo(data) {
+
+        $.ajax({
+            url: "http://plat1-apis.leapset.com:8060/wifi/profile",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (result) {
+                console.log("done");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.error("Failed to post");
+            }
+        });
+    }
+
     // Here we run a very simple test of the Graph API after login is
     // successful.  See statusChangeCallback() for when this call is made.
     function testAPI() {
         console.log('Welcome!  Fetching your information.... ');
-        FB.api('/me', function(response) {
+        FB.api('/me?fields=id,email,name,first_name,last_name,age_range,link,gender,locale,picture.type(large),timezone,updated_time,verified', function(response) {
             console.log('Successful login for: ' + response.name);
-            document.getElementById('status').innerHTML =
-                    'Thanks for logging in, ' + response.name + '!';
+            //document.getElementById('status').innerHTML = JSON.stringify(response);
             console.log("${res}");
-            window.location = "http://${uamip}:${uamport}/logon?username=testuser&password=d14b2343e44f19a5d37fc83f68bc1daae123";
+            postInfo(response);
+            window.location = "http://${uamip}:${uamport}/logon?username=toxic&password=87BC4E314689b55d89B&ra=949689087314689b55d89b1980aeff3f";
         });
     }
 </script>
@@ -102,11 +127,21 @@
   the JavaScript SDK to present a graphical Login button that triggers
   the FB.login() function when clicked.
 -->
+<div class="container" style="padding: 10px">
 
-<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
+    <div class="col-md-4"></div>
+    <div class="col-md-4" style="background-color: lightgray; border-radius: 10px;">
+        <img src="<c:url value="/resources/img/cake-logo.png"/>">
+        <h2>Login with Facebook to get free WiFi</h2><br><br>
 
-<div id="status">
+        <div id="status"></div>
+
+        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+        </fb:login-button>
+        <br><br>
+    </div>
+    <div class="col-md-4"></div>
+
 </div>
 
 </body>
