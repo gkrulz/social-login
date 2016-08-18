@@ -2,7 +2,10 @@ package com.gk.springtest.controller;
 
 import com.gk.springtest.beans.Profile;
 import com.gk.springtest.util.ResponsesGenerator;
-import com.google.gson.JsonObject;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +29,7 @@ import java.util.HashMap;
 
 @Controller
 @EnableWebMvc
+@Api(value = "/" , description = "Operations that can be triggered on cake Wifi")
 public class Responder {
     private static final Logger LOGGER = Logger.getLogger(Responder.class);
     private static HashMap<String, Timestamp> clients;
@@ -36,6 +40,32 @@ public class Responder {
         profile = new Profile();
     }
 
+    @ApiOperation(
+            value = "The endpoint to send cutomer info",
+            notes = "The endpoint will save the cutomer details captured while the Facebook WiFi login")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 200,
+                    message = "Success"
+            ),
+            @ApiResponse(
+                    code = 401,
+                    message = "Unauthorized"
+            ),
+            @ApiResponse(
+                    code = 403,
+                    message = "Forbidden"
+            ),
+            @ApiResponse(
+                    code = 404,
+                    message = "Not found"
+            ),
+            @ApiResponse(
+                    code = 500,
+                    message = "Invalid parameter provided for Profile </br>" +
+                            "Unable to find account"
+            )
+    })
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
     public ResponseEntity<String> setProfile(@RequestBody Profile data) {
 
